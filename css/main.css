@@ -1833,7 +1833,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff3c14;
+  background: #06ffff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3134,8 +3134,8 @@ img.img-topic {
   width: 60%;
 }
 .post {
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   padding: 15px;
   -webkit-box-shadow: 0 0 14px rgba(202,203,203,0.5);
   -moz-box-shadow: 0 0 14px rgba(202,203,204,0.5);
@@ -3145,4 +3145,7 @@ img.img-topic {
 }
 .post-button {
   margin-top: 0px;
+}
+.post-block.page {
+  padding: 20px;
 }
