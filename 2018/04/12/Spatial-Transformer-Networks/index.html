@@ -88,7 +88,7 @@
 <meta property="og:image" content="http://yoursite.com/images/stn/intro-res.png">
 <meta property="og:image" content="http://yoursite.com/images/stn/architecture.png">
 <meta property="og:image" content="http://yoursite.com/images/stn/para-sample.png">
-<meta property="og:updated_time" content="2018-04-13T05:58:59.090Z">
+<meta property="og:updated_time" content="2018-04-13T08:31:32.682Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spatial Transformer Networks">
 <meta name="twitter:description" content="传统CNN通过扩增数据获得数据的一些不变性，如旋转不变性，平移不变性等，是一种隐式的学习，而空间变换网络（Spatial Transformer Networks，简称STN）通过显式学习数据的各种变换参数（如旋转，平移，仿射变换等）来获得这些变换的不变性。这个网络可以很方便的插入到已有的CNN网络中。">
@@ -344,7 +344,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-04-13T13:58:59+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-04-13T16:31:32+08:00">
                 2018-04-13
               </time>
             
@@ -436,12 +436,9 @@
 </blockquote>
 <a id="more"></a>
 <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
-<li><p><strong>不变性（invariance）</strong>：在CNN中，pooling层使得网络对位置的敏感度越来越低，从而使网络具有一定的平移不变性。这种空间不变性是通过多层的conv和pooling层实现的，而且对变换较大的输入数据并不具有不变性。</p>
-</li>
-<li><p><strong>Spatial Transformer</strong>: 引入空间变换模块（spatial transformer module），可以添加到任何一个标准的神经网络结构中，从而提供空间变换的能力。与pooling层不同，空间变换模块是一个动态的机制，训练得到合适的变换参数，然后将这个变换应用在整个feature map上，可以覆盖scaling, cropping, ratations等变换。这样的好处是可以使得网络选择出一幅图像中最相关的区域，如下图所示，(a)是输入图像，(b)是空间变换模块预测的定位结果，(c)是空间变换后的结果，(d)是分类结果。</p>
-</li>
-<li><p><strong>应用</strong>：STN可以嵌入CNN中实现不同的任务，例如：</p>
-<ul>
+<li><strong>不变性（invariance）</strong>：在CNN中，pooling层使得网络对位置的敏感度越来越低，从而使网络具有一定的平移不变性。这种空间不变性是通过多层的conv和pooling层实现的，而且对变换较大的输入数据并不具有不变性。</li>
+<li><strong>Spatial Transformer</strong>: 引入空间变换模块（spatial transformer module），可以添加到任何一个标准的神经网络结构中，从而提供空间变换的能力。与pooling层不同，空间变换模块是一个动态的机制，训练得到合适的变换参数，然后将这个变换应用在整个feature map上，可以覆盖scaling, cropping, ratations等变换。这样的好处是可以使得网络选择出一幅图像中最相关的区域，如下图所示，(a)是输入图像，(b)是空间变换模块预测的定位结果，(c)是空间变换后的结果，(d)是分类结果。</li>
+<li><strong>应用</strong>：STN可以嵌入CNN中实现不同的任务，例如：<ul>
 <li><strong>image classification</strong>: STN可以crop out和scale-normalize合适的区域，简化接下来的分类任务，提高分类性能；</li>
 <li><strong>co-localisation</strong>: 不需要标记目标的位置，通过STN，可以定位目标；</li>
 <li><strong>spatial attention</strong>: 可以实现attention机制，很灵活，无需增强学习。</li>
@@ -454,10 +451,8 @@
 <center><img src="/images/stn/architecture.png" width="60%"></center>
 
 <ul>
-<li><p><strong>Localisation Network</strong>: 输入feature map，输出$\theta$。$\theta$的尺寸取决于变换类型，比如对于仿射变换，$\theta$就是6维的。这个网络可以采用任意形式，比如全连接网络或卷积网络，但是最后应该有一个回归层输出参数$\theta$。</p>
-</li>
-<li><p><strong>Parameterised Sampling Grid</strong>: 以下是将Parameterised Sampling Grid应用到图像U上得到输出V的两个例子，图(a)是一个单位变换，图(b)是一个仿射变换。</p>
-</li>
+<li><strong>Localisation Network</strong>: 输入feature map，输出$\theta$。$\theta$的尺寸取决于变换类型，比如对于仿射变换，$\theta$就是6维的。这个网络可以采用任意形式，比如全连接网络或卷积网络，但是最后应该有一个回归层输出参数$\theta$。</li>
+<li><strong>Parameterised Sampling Grid</strong>: 以下是将Parameterised Sampling Grid应用到图像U上得到输出V的两个例子，图(a)是一个单位变换，图(b)是一个仿射变换。</li>
 </ul>
 <center><img src="/images/stn/para-sample.png" width="60%"></center>
 
