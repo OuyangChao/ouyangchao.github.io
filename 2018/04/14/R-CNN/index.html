@@ -85,12 +85,12 @@
 <meta property="og:site_name" content="Chao Ouyang&#39;s Blog">
 <meta property="og:description" content="R-CNN，结合Region Proposal和CNN的目标检测算法。使用Region Proposal (Selective Search)算法得到有可能是目标的若干图像局部区域，然后把这些区域分别输入到CNN中，得到区域的特征，加上SVM分类器，判断特征对应的区域是属于某类目标还是背景，最后进行边框回归。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/overview.png">
-<meta property="og:updated_time" content="2018-04-14T15:26:26.464Z">
+<meta property="og:image" content="http://yoursite.com/images/r-cnn/overview.png">
+<meta property="og:updated_time" content="2018-04-14T15:28:50.221Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="R-CNN">
 <meta name="twitter:description" content="R-CNN，结合Region Proposal和CNN的目标检测算法。使用Region Proposal (Selective Search)算法得到有可能是目标的若干图像局部区域，然后把这些区域分别输入到CNN中，得到区域的特征，加上SVM分类器，判断特征对应的区域是属于某类目标还是背景，最后进行边框回归。">
-<meta name="twitter:image" content="http://yoursite.com/images/overview.png">
+<meta name="twitter:image" content="http://yoursite.com/images/r-cnn/overview.png">
 
 
 
@@ -342,7 +342,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-04-14T23:26:26+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-04-14T23:28:50+08:00">
                 2018-04-14
               </time>
             
@@ -435,7 +435,7 @@
 <a id="more"></a>
 <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>在R-CNN之前，目标检测已经到了瓶颈期，一些最好的方法都是结合底层图像特征和高层语义的复杂集成系统。而这篇论文在VOC2012的mAP达到了53.3%，比之前最好的方法高30%。该方法主要有两个关键点：1）一个是将CNN应用在了自底向上的区域候选框上，用来定位和分割目标；2）当标记的训练数据比较少时，采用有监督预训练，并进行微调，可以显著提高性能。</p>
 <h1 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><code>R-CNN</code>的目标检测系统由三部分组成：第一步生成region proposal，采用<code>selective search</code>算法；第二步使用CNN提取固定长度的特征向量；第三步使用线性SVM分类。</p>
-<center><img src="/images/overview.png" width="60%"></center>
+<center><img src="/images/r-cnn/overview.png" width="60%"></center>
 
 <h2 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h2><ul>
 <li>有监督预训练：在ILSVRC2012分类数据集上预训练。</li>
