@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Faster R-CNN]]></title>
+    <url>%2F2018%2F04%2F15%2FFaster-R-CNN%2F</url>
+    <content type="text"><![CDATA[Faster R-CCN已经将特征提取(feature extraction)，proposal提取，bounding box regression，classification都整合在了一个网络中，使得综合性能有较大提高，在检测速度方面尤为明显。 Introduction如下图所示，Faster R-CNN其实可以分为4个主要内容： Conv layers。作为一种CNN网络目标检测方法，Faster R-CNN首先使用一组基础的conv+relu+pooling层提取image的feature maps。该feature maps被共享用于后续RPN层和全连接层。 Region Proposal Networks。RPN网络用于生成region proposals。该层通过softmax判断anchors属于foreground或者background，再利用bounding box regression修正anchors获得精确的proposals。 Roi Pooling。该层收集输入的feature maps和proposals，综合这些信息后提取proposal feature maps，送入后续全连接层判定目标类别。 Classification。利用proposal feature maps计算proposal的类别，同时再次bounding box regression获得检测框最终的精确位置。 Faster R-CNN下图展示了Python版本中的VGG16模型中的faster_rcnn_test.pt的网络结构，可以清晰的看到该网络对于一副任意大小PxQ的图像，首先缩放至固定大小MxN，然后将MxN图像送入网络；而Conv layers中包含了13个conv层+13个relu层+4个pooling层；RPN网络首先经过3x3卷积，再分别生成foreground anchors与bounding box regression偏移量，然后计算出proposals；而Roi Pooling层则利用proposals从feature maps中提取proposal feature送入后续全连接和softmax网络作classification（即分类proposal到底是什么object）。 Conv layersConv layers包含了conv，pooling，relu三种层。以python版本中的VGG16模型中的faster_rcnn_test.pt的网络结构为例，如图2，Conv layers部分共有13个conv层，13个relu层，4个pooling层。这里有一个非常容易被忽略但是又无比重要的信息，在Conv layers中： 所有的conv层都是：kernel_size=3，pad=1 所有的pooling层都是：kernel_size=2，stride=2 为何重要？在Faster RCNN Conv layers中对所有的卷积都做了扩边处理（pad=1，即填充一圈0），导致原图变为(M+2)x(N+2)大小，再做3x3卷积后输出MxN。正是这种设置，导致Conv layers中的conv层不改变输入和输出矩阵大小。如下图： 类似的是，Conv layers中的pooling层kernel_size=2，stride=2。这样每个经过pooling层的MxN矩阵，都会变为(M/2)*(N/2)大小。综上所述，在整个Conv layers中，conv和relu层不改变输入输出大小，只有pooling层使输出长宽都变为输入的1/2。 那么，一个MxN大小的矩阵经过Conv layers固定变为(M/16)x(N/16)！这样Conv layers生成的featuure map中都可以和原图对应起来。 Region Proposal Networks (RPN)经典的检测方法生成检测框都非常耗时，如OpenCV adaboost使用滑动窗口+图像金字塔生成检测框；或如RCNN使用SS(Selective Search)方法生成检测框。而Faster RCNN则抛弃了传统的滑动窗口和SS方法，直接使用RPN生成检测框，这也是Faster RCNN的巨大优势，能极大提升检测框的生成速度。 上图展示了RPN网络的具体结构。可以看到RPN网络实际分为2条线，上面一条通过softmax分类anchors获得foreground和background（检测目标是foreground），下面一条用于计算对于anchors的bounding box regression偏移量，以获得精确的proposal。而最后的Proposal层则负责综合foreground anchors和bounding box regression偏移量获取proposals，同时剔除太小和超出边界的proposals。其实整个网络到了Proposal Layer这里，就完成了相当于目标定位的功能。 RoI poolingRoI Pooling层则负责收集proposal，并计算出proposal feature maps，送入后续网络。从图3中可以看到Rol pooling层有2个输入： 原始的feature maps RPN输出的proposal boxes（大小各不相同） ClassificationClassification部分利用已经获得的proposal feature maps，通过full connect层与softmax计算每个proposal具体属于那个类别（如人，车，电视等），输出cls_prob概率向量；同时再次利用bounding box regression获得每个proposal的位置偏移量bbox_pred，用于回归更加精确的目标检测框。Classification部分网络结构如下图： 从PoI Pooling获取到7x7=49大小的proposal feature maps后，送入后续网络，可以看到做了如下2件事： 通过全连接和softmax对proposals进行分类，这实际上已经是识别的范畴了 再次对proposals进行bounding box regression，获取更高精度的rect box Reference Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks Caffe源码实现，Python版本 Caffe源码实现，Matlab版本 faster-RCNN算法原理详解]]></content>
+      <categories>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>Deep learning</tag>
+        <tag>CNN</tag>
+        <tag>Object detection</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Fast R-CNN]]></title>
+    <url>%2F2018%2F04%2F15%2FFast-R-CNN%2F</url>
+    <content type="text"><![CDATA[Fast R-CNN是对R-CNN算法的改进，采用了一些创新措施来提高训练和测试速度，同时提高检测准确率。Fast R-CNN训练VGG16网络比R-CNN快9倍，测试速度快213倍，并在PASCAL VOC上得到更高的精度。与SPPnet相比，Fast R-CNN训练VGG16网络比它快3倍，测试速度快10倍，并且更准确。 IntroductionR-CNN有以下缺点： 训练分为多个步骤：R-CNN首先需要微调CNN，然后使用SVM对CNN提取的特征进行分类，最后还要训练一个bounding-box的回归器。 训练过程的空间和时间代价高：对于SVM和bounding-box回归器的训练，需要保存每幅图像的每个proposal的特征。 目标检测速度慢：采用VGG16测试一张图片需要47s（在GPU上）。 R-CNN检测速度慢的原因在于使用CNN对每个proposal进行前向运算时没有共享计算。SPPnet采用了共享计算来加速R-CNN，即对输入图像只进行一次前向运算，然后从最后共享的feature map中提取出每个proposal的特征向量进行分类。SPPnet在测试阶段比R-CNN快了10-100倍。由于更快的特征提取，所以训练时间也减少了近3倍。SPPnet也有明显的缺点，和R-CNN一样，训练过程也分为多个步骤，也需要保存中间的特征。 Fast R-CNN下图是Fast R-CNN的框架，步骤如下： 第一步，将这个完整的图片经过若干卷积层与max pooling层，得到一个feature map。 第二步，用selective search算法从这完整的图片中提取出object proposals，即RoI。 第三步，根据映射关系，可以得到每个object proposal对应的feature map。 第四步，将第三步得到的feature map经过RoI pooling layer得到固定大小的feature map（变小了）。 第五步，经过2层全连接层（fc），得到固定大小的RoI特征向量。 第六步，特征向量经由各自的FC层，得到两个输出向量：第一个是分类，使用softmax，第二个是每一类的bounding box回归。 简要流程图如下： Reference Fast R-CNN Caffe源码实现 Fast R-CNN笔记 【目标检测】Fast RCNN算法详解]]></content>
+      <categories>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>Deep learning</tag>
+        <tag>CNN</tag>
+        <tag>Object detection</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[SPP-net]]></title>
     <url>%2F2018%2F04%2F14%2FSPP-net%2F</url>
     <content type="text"><![CDATA[为了解决现有CNN需要固定输入大小的问题，提出了SPP-net，使得针对任意尺寸的图像生成固定长度的特征表示。SPP-net不仅可以应用在分类任务上，而且在检测任务上也有很大的性能提升。 IntroductionCNN正在取得快速的发展，然而在CNN的训练和测试阶段都有一个技术问题：CNN需要固定输入图像的尺寸，这些图片或者经过裁切（crop）或者经过变形缩放（warp），都在一定程度上导致图片信息的丢失和变形，限制了识别精确度。 如下图所示，上面是CNN一般的做法，对不符合网络输入大小的图像直接进行crop或warp，下面是SPP-net的工作方式。SPP-net加在最后一个卷积层的输出后面，使得不同输入尺寸的图像在进过前面的卷积池化过程后，再经过SPP-net，得到相同大小的feature map，最后再经过全连接层进行分类。 Spatital Pyramid Pooling卷积层是不需要输入固定大小的图片的，而且还可以生成任意大小的特征图，只是全连接层需要固定大小的输入。因此，固定长度的约束仅限于全连接层。在本文中提出了Spatial Pyramid Pooling layer 来解决这一问题，使用这种方式，可以让网络输入任意的图片，而且还会生成固定大小的输出。 以下图为例，黑色图片代表卷积之后的特征图，接着我们以不同大小的块来提取特征，分别是4*4，2*2，1*1，将这三张网格放到下面这张特征图上，就可以得到16+4+1=21种不同的块(Spatial bins)，我们从这21个块中，每个块提取出一个特征，这样刚好就是我们要提取的21维特征向量。这种以不同的大小格子的组合方式来池化的过程就是空间金字塔池化（SPP）。比如，要进行空间金字塔最大池化，其实就是从这21个图片块中，分别计算每个块的最大值，从而得到一个输出单元，最终得到一个21维特征的输出。 金字塔池化的意义总结而言，当网络输入的是一张任意大小的图片，这个时候我们可以一直进行卷积、池化，直到网络的倒数几层的时候，也就是我们即将与全连接层连接的时候，就要使用金字塔池化，使得任意大小的特征图都能够转换成固定大小的特征向量，这就是空间金字塔池化的意义（多尺度特征提取出固定大小的特征向量）。 SPP-net在目标检测中的应用对于R-CNN，整个过程是： 首先通过选择性搜索，对待检测的图片进行搜索出~2000个候选窗口。 把这2k个候选窗口的图片都缩放到227*227，然后分别输入CNN中，每个proposal提取出一个特征向量，也就是说利用CNN对每个proposal进行提取特征向量。 把上面每个候选窗口的对应特征向量，利用SVM算法进行分类识别。 可以看出R-CNN的计算量是非常大的，因为2k个候选窗口都要输入到CNN中，分别进行特征提取。 而对于SPP-Net，整个过程是： 首先通过选择性搜索，对待检测的图片进行搜索出2000个候选窗口。这一步和R-CNN一样。 特征提取阶段。这一步就是和R-CNN最大的区别了，这一步骤的具体操作如下：把整张待检测的图片，输入CNN中，进行一次性特征提取，得到feature maps，然后在feature maps中找到各个候选框的区域，再对各个候选框采用金字塔空间池化，提取出固定长度的特征向量。而R-CNN输入的是每个候选框，然后在进入CNN，因为SPP-Net只需要一次对整张图片进行特征提取，速度会大大提升。 最后一步也是和R-CNN一样，采用SVM算法进行特征向量分类识别。 下图为SPP-net进行目标检测的完整步骤： Reference Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition (PAMI, 2015) SPPnet论文总结 SPP-Net论文详解 Caffe源码实现]]></content>

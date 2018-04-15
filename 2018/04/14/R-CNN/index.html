@@ -86,7 +86,7 @@
 <meta property="og:description" content="R-CNN，结合Region Proposal和CNN的目标检测算法。使用Region Proposal (Selective Search)算法得到有可能是目标的若干图像局部区域，然后把这些区域分别输入到CNN中，得到区域的特征，加上SVM分类器，判断特征对应的区域是属于某类目标还是背景，最后进行边框回归。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/r-cnn/overview.png">
-<meta property="og:updated_time" content="2018-04-14T15:32:53.434Z">
+<meta property="og:updated_time" content="2018-04-15T02:20:41.308Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="R-CNN">
 <meta name="twitter:description" content="R-CNN，结合Region Proposal和CNN的目标检测算法。使用Region Proposal (Selective Search)算法得到有可能是目标的若干图像局部区域，然后把这些区域分别输入到CNN中，得到区域的特征，加上SVM分类器，判断特征对应的区域是属于某类目标还是背景，最后进行边框回归。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-04-14T23:32:53+08:00">
-                2018-04-14
+              <time title="更新于" itemprop="dateModified" datetime="2018-04-15T10:20:41+08:00">
+                2018-04-15
               </time>
             
           </span>
@@ -450,11 +450,9 @@
 <li>可以不进行特定样本下的微调吗？可以直接采用<code>AlexNet</code>网络的特征进行SVM训练吗?</li>
 </ol>
 <ul>
-<li>⽂中设计了没有进⾏微调的对⽐实验，分别就AlexNet⽹络的pool5、fc6、fc7层进⾏特征提取，输⼊SVM进⾏训练，这相当于把AlexNet网络作为特征提取器，类似HOG、SIFT等做特征提取⼀样，不针对特征任务。实验结果发现f6层提取的特征⽐f7层的mAP还⾼，pool5层提取的特征与f6、f7层相⽐mAP差不多；<ul>
+<li>⽂中设计了没有进⾏微调的对⽐实验，分别就AlexNet⽹络的pool5、fc6、fc7层进⾏特征提取，输⼊SVM进⾏训练，这相当于把AlexNet网络作为特征提取器，类似HOG、SIFT等做特征提取⼀样，不针对特征任务。实验结果发现f6层提取的特征⽐f7层的mAP还⾼，pool5层提取的特征与f6、f7层相⽐mAP差不多；</li>
 <li>在PASCAL VOC 2007数据集上采取了微调后fc6、fc7层特征较pool5层特征⽤于SVM训练提升mAP⼗分明显；</li>
 <li>由此作者得出结论：不针对特定任务进⾏微调，⽽将CNN当成特征提取器，pool5层得到的特征是基础特征，类似于HOG、SIFT，类似于只学习到了⼈脸共性特征；从fc6和fc7等全连接层中所学习到的特征是针对特征任务特定样本的特征，类似于学习到了分类性别分类年龄的个性特征。</li>
-</ul>
-</li>
 </ul>
 <ol start="2">
 <li>为什么微调时和训练SVM时所采⽤的正负样本阈值【0.5和0.3】不⼀致？</li>
@@ -609,7 +607,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

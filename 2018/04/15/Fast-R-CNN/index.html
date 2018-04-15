@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Deep learning,CNN,Object detection," />
 
 
 
@@ -77,13 +77,21 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chao Ouyang&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/categories/论文笔记/index.html">
+<meta name="description" content="Fast R-CNN是对R-CNN算法的改进，采用了一些创新措施来提高训练和测试速度，同时提高检测准确率。Fast R-CNN训练VGG16网络比R-CNN快9倍，测试速度快213倍，并在PASCAL VOC上得到更高的精度。与SPPnet相比，Fast R-CNN训练VGG16网络比它快3倍，测试速度快10倍，并且更准确。">
+<meta name="keywords" content="Deep learning,CNN,Object detection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fast R-CNN">
+<meta property="og:url" content="http://yoursite.com/2018/04/15/Fast-R-CNN/index.html">
 <meta property="og:site_name" content="Chao Ouyang&#39;s Blog">
+<meta property="og:description" content="Fast R-CNN是对R-CNN算法的改进，采用了一些创新措施来提高训练和测试速度，同时提高检测准确率。Fast R-CNN训练VGG16网络比R-CNN快9倍，测试速度快213倍，并在PASCAL VOC上得到更高的精度。与SPPnet相比，Fast R-CNN训练VGG16网络比它快3倍，测试速度快10倍，并且更准确。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/fast-rcnn/architecture.png">
+<meta property="og:image" content="http://yoursite.com/images/fast-rcnn/small-arch.png">
+<meta property="og:updated_time" content="2018-04-15T03:26:57.878Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chao Ouyang&#39;s Blog">
+<meta name="twitter:title" content="Fast R-CNN">
+<meta name="twitter:description" content="Fast R-CNN是对R-CNN算法的改进，采用了一些创新措施来提高训练和测试速度，同时提高检测准确率。Fast R-CNN训练VGG16网络比R-CNN快9倍，测试速度快213倍，并在PASCAL VOC上得到更高的精度。与SPPnet相比，Fast R-CNN训练VGG16网络比它快3倍，测试速度快10倍，并且更准确。">
+<meta name="twitter:image" content="http://yoursite.com/images/fast-rcnn/architecture.png">
 
 
 
@@ -113,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/论文笔记/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/15/Fast-R-CNN/"/>
 
 
 
 
 
-  <title>分类: 论文笔记 | Chao Ouyang's Blog</title>
+  <title>Fast R-CNN | Chao Ouyang's Blog</title>
   
 
 
@@ -138,7 +146,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -276,167 +284,251 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block category">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>论文笔记<small>分类</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/15/Fast-R-CNN/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chao Ouyang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/mammoth/mammoth-icon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chao Ouyang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/04/15/Faster-R-CNN/" itemprop="url">
-              
-                <span itemprop="name">Faster R-CNN</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Fast R-CNN</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-15T11:28:29+08:00"
-              content="2018-04-15" >
-          04-15
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-15T11:25:02+08:00">
+                2018-04-15
+              </time>
+            
 
-    </header>
-  </article>
+            
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-04-15T11:26:57+08:00">
+                2018-04-15
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">论文笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计 &#58;</span>
+                
+                <span title="字数统计">
+                  575
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/15/Fast-R-CNN/" itemprop="url">
-              
-                <span itemprop="name">Fast R-CNN</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-15T11:25:02+08:00"
-              content="2018-04-15" >
-          04-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
+        <blockquote>
+<p><strong>Fast R-CNN</strong>是对R-CNN算法的改进，采用了一些创新措施来提高训练和测试速度，同时提高检测准确率。Fast R-CNN训练VGG16网络比R-CNN快9倍，测试速度快213倍，并在PASCAL VOC上得到更高的精度。与SPPnet相比，Fast R-CNN训练VGG16网络比它快3倍，测试速度快10倍，并且更准确。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>R-CNN有以下缺点：</p>
+<ul>
+<li>训练分为多个步骤：R-CNN首先需要微调CNN，然后使用SVM对CNN提取的特征进行分类，最后还要训练一个bounding-box的回归器。</li>
+<li>训练过程的空间和时间代价高：对于SVM和bounding-box回归器的训练，需要保存每幅图像的每个proposal的特征。</li>
+<li>目标检测速度慢：采用VGG16测试一张图片需要47s（在GPU上）。</li>
+</ul>
+<p>R-CNN检测速度慢的原因在于使用CNN对每个proposal进行前向运算时没有共享计算。SPPnet采用了共享计算来加速R-CNN，即对输入图像只进行一次前向运算，然后从最后共享的feature map中提取出每个proposal的特征向量进行分类。SPPnet在测试阶段比R-CNN快了10-100倍。由于更快的特征提取，所以训练时间也减少了近3倍。SPPnet也有明显的缺点，和R-CNN一样，训练过程也分为多个步骤，也需要保存中间的特征。</p>
+<h1 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h1><p>下图是Fast R-CNN的框架，步骤如下：</p>
+<ul>
+<li>第一步，将这个完整的图片经过若干卷积层与max pooling层，得到一个feature map。</li>
+<li>第二步，用selective search算法从这完整的图片中提取出object proposals，即RoI。</li>
+<li>第三步，根据映射关系，可以得到每个object proposal对应的feature map。</li>
+<li>第四步，将第三步得到的feature map经过RoI pooling layer得到固定大小的feature map（变小了）。</li>
+<li>第五步，经过2层全连接层（fc），得到固定大小的RoI特征向量。</li>
+<li>第六步，特征向量经由各自的FC层，得到两个输出向量：第一个是分类，使用softmax，第二个是每一类的bounding box回归。</li>
+</ul>
+<center><img src="/images/fast-rcnn/architecture.png" width="70%"></center>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/14/SPP-net/" itemprop="url">
-              
-                <span itemprop="name">SPP-net</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-14T23:30:53+08:00"
-              content="2018-04-14" >
-          04-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/14/R-CNN/" itemprop="url">
-              
-                <span itemprop="name">R-CNN</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-14T23:24:00+08:00"
-              content="2018-04-14" >
-          04-14
-        </time>
-      </div>
-
-    </header>
-  </article>
+<p>简要流程图如下：</p>
+<center><img src="/images/fast-rcnn/small-arch.png" width="80%"></center>
 
 
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/12/Spatial-Transformer-Networks/" itemprop="url">
-              
-                <span itemprop="name">Spatial Transformer Networks</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-12T12:51:11+08:00"
-              content="2018-04-12" >
-          04-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://arxiv.org/abs/1504.08083" target="_blank" rel="noopener">Fast R-CNN</a></li>
+<li><a href="https://github.com/rbgirshick/fast-rcnn" target="_blank" rel="noopener">Caffe源码实现</a></li>
+<li><a href="http://blog.csdn.net/hjl240/article/details/51912415" target="_blank" rel="noopener">Fast R-CNN笔记</a></li>
+<li><a href="http://blog.csdn.net/shenxiaolu1984/article/details/51036677" target="_blank" rel="noopener">【目标检测】Fast RCNN算法详解</a></li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Deep-learning/" rel="tag"><i class="fa fa-tag"></i> Deep learning</a>
+          
+            <a href="/tags/CNN/" rel="tag"><i class="fa fa-tag"></i> CNN</a>
+          
+            <a href="/tags/Object-detection/" rel="tag"><i class="fa fa-tag"></i> Object detection</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/14/SPP-net/" rel="next" title="SPP-net">
+                <i class="fa fa-chevron-left"></i> SPP-net
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/15/Faster-R-CNN/" rel="prev" title="Faster R-CNN">
+                Faster R-CNN <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -444,6 +536,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -464,8 +560,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -547,6 +652,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fast-R-CNN"><span class="nav-text">Fast R-CNN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -683,6 +804,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
