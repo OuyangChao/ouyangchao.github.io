@@ -77,24 +77,22 @@
 
 
 
-<meta name="description" content="Faster R-CCN已经将特征提取(feature extraction)，proposal提取，bounding box regression，classification都整合在了一个网络中，使得综合性能有较大提高，在检测速度方面尤为明显。">
+<meta name="description" content="这篇文章在既保证速度，又要保证精度的情况下，提出了SSD物体检测模型。SSD将检测过程整个成一个single deep neural network，便于训练与优化，同时提高检测速度。SSD将输出一系列离散化的bounding boxes，这些bounding boxes是在不同层次上的 feature maps上生成的，并且有着不同的aspect ratio。">
 <meta name="keywords" content="Deep learning,CNN,Object detection">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Faster R-CNN">
-<meta property="og:url" content="http://yoursite.com/2018/04/15/Faster-R-CNN/index.html">
+<meta property="og:title" content="SSD">
+<meta property="og:url" content="http://yoursite.com/2018/04/21/SSD/index.html">
 <meta property="og:site_name" content="Chao Ouyang&#39;s Blog">
-<meta property="og:description" content="Faster R-CCN已经将特征提取(feature extraction)，proposal提取，bounding box regression，classification都整合在了一个网络中，使得综合性能有较大提高，在检测速度方面尤为明显。">
+<meta property="og:description" content="这篇文章在既保证速度，又要保证精度的情况下，提出了SSD物体检测模型。SSD将检测过程整个成一个single deep neural network，便于训练与优化，同时提高检测速度。SSD将输出一系列离散化的bounding boxes，这些bounding boxes是在不同层次上的 feature maps上生成的，并且有着不同的aspect ratio。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/faster-rcnn.png">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/vgg16.png">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/MN.png">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/rpn.png">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/cls.png">
-<meta property="og:updated_time" content="2018-04-15T03:43:10.662Z">
+<meta property="og:image" content="http://yoursite.com/images/ssd/multi-scale.png">
+<meta property="og:image" content="http://yoursite.com/images/ssd/network.png">
+<meta property="og:image" content="http://yoursite.com/images/ssd/tricks.png">
+<meta property="og:updated_time" content="2018-04-21T15:15:00.251Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Faster R-CNN">
-<meta name="twitter:description" content="Faster R-CCN已经将特征提取(feature extraction)，proposal提取，bounding box regression，classification都整合在了一个网络中，使得综合性能有较大提高，在检测速度方面尤为明显。">
-<meta name="twitter:image" content="http://yoursite.com/images/faster-rcnn/faster-rcnn.png">
+<meta name="twitter:title" content="SSD">
+<meta name="twitter:description" content="这篇文章在既保证速度，又要保证精度的情况下，提出了SSD物体检测模型。SSD将检测过程整个成一个single deep neural network，便于训练与优化，同时提高检测速度。SSD将输出一系列离散化的bounding boxes，这些bounding boxes是在不同层次上的 feature maps上生成的，并且有着不同的aspect ratio。">
+<meta name="twitter:image" content="http://yoursite.com/images/ssd/multi-scale.png">
 
 
 
@@ -124,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/15/Faster-R-CNN/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/21/SSD/"/>
 
 
 
 
 
-  <title>Faster R-CNN | Chao Ouyang's Blog</title>
+  <title>SSD | Chao Ouyang's Blog</title>
   
 
 
@@ -301,7 +299,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/15/Faster-R-CNN/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/21/SSD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chao Ouyang">
@@ -318,7 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Faster R-CNN</h1>
+          <h1 class="post-title" itemprop="name headline">SSD</h1>
         
 
         <div class="post-meta">
@@ -331,8 +329,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-15T11:28:29+08:00">
-                2018-04-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-21T23:12:20+08:00">
+                2018-04-21
               </time>
             
 
@@ -347,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-04-15T11:43:10+08:00">
-                2018-04-15
+              <time title="更新于" itemprop="dateModified" datetime="2018-04-21T23:15:00+08:00">
+                2018-04-21
               </time>
             
           </span>
@@ -397,7 +395,7 @@
                   <span class="post-meta-item-text">字数统计 &#58;</span>
                 
                 <span title="字数统计">
-                  1,142
+                  678
                 </span>
               
 
@@ -413,7 +411,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  3
                 </span>
               
             </div>
@@ -435,53 +433,33 @@
 
       
         <blockquote>
-<p>Faster R-CCN已经将特征提取(feature extraction)，proposal提取，bounding box regression，classification都整合在了一个网络中，使得综合性能有较大提高，在检测速度方面尤为明显。</p>
+<p>这篇文章在既保证速度，又要保证精度的情况下，提出了SSD物体检测模型。SSD将检测过程整个成一个single deep neural network，便于训练与优化，同时提高检测速度。SSD将输出一系列离散化的bounding boxes，这些bounding boxes是在不同层次上的 feature maps上生成的，并且有着不同的aspect ratio。</p>
 </blockquote>
 <a id="more"></a>
-<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>如下图所示，Faster R-CNN其实可以分为4个主要内容：</p>
-<ul>
-<li>Conv layers。作为一种CNN网络目标检测方法，Faster R-CNN首先使用一组基础的conv+relu+pooling层提取image的feature maps。该feature maps被共享用于后续RPN层和全连接层。</li>
-<li>Region Proposal Networks。RPN网络用于生成region proposals。该层通过softmax判断anchors属于foreground或者background，再利用bounding box regression修正anchors获得精确的proposals。</li>
-<li>Roi Pooling。该层收集输入的feature maps和proposals，综合这些信息后提取proposal feature maps，送入后续全连接层判定目标类别。</li>
-<li>Classification。利用proposal feature maps计算proposal的类别，同时再次bounding box regression获得检测框最终的精确位置。</li>
-</ul>
-<center><img src="/images/faster-rcnn/faster-rcnn.png" width="60%"></center>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><center><img src="/images/ssd/multi-scale.png" width="80%"></center>
 
-<h1 id="Faster-R-CNN"><a href="#Faster-R-CNN" class="headerlink" title="Faster R-CNN"></a>Faster R-CNN</h1><p>下图展示了Python版本中的VGG16模型中的faster_rcnn_test.pt的网络结构，可以清晰的看到该网络对于一副任意大小PxQ的图像，首先缩放至固定大小MxN，然后将MxN图像送入网络；而Conv layers中包含了13个conv层+13个relu层+4个pooling层；RPN网络首先经过3x3卷积，再分别生成foreground anchors与bounding box regression偏移量，然后计算出proposals；而Roi Pooling层则利用proposals从feature maps中提取proposal feature送入后续全连接和softmax网络作classification（即分类proposal到底是什么object）。</p>
-<center><img src="/images/faster-rcnn/vgg16.png" width="90%"></center>
-
-<h2 id="Conv-layers"><a href="#Conv-layers" class="headerlink" title="Conv layers"></a>Conv layers</h2><p>Conv layers包含了conv，pooling，relu三种层。以python版本中的VGG16模型中的faster_rcnn_test.pt的网络结构为例，如图2，Conv layers部分共有13个conv层，13个relu层，4个pooling层。这里有一个非常容易被忽略但是又无比重要的信息，在Conv layers中：</p>
+<p>SSD的特殊之处主要体现在以下3点：</p>
 <ol>
-<li>所有的conv层都是：kernel_size=3，pad=1</li>
-<li>所有的pooling层都是：kernel_size=2，stride=2</li>
+<li>多尺度的特征图检测（Multi-scale），如SSD同时使用了上图所示的<code>8*8</code>的特征图和<code>4*4</code>特征图。</li>
+<li>相比于YOLO，作者使用的是卷积层来代替了YOLO的全连接层做预测。（如下图所示）</li>
+<li>SSD使用了默认的边界框+（1，2/1，3/1，1/2，1/3）6个框来做检测（aspect ratios）</li>
 </ol>
-<p>为何重要？在Faster RCNN Conv layers中对所有的卷积都做了扩边处理（pad=1，即填充一圈0），导致原图变为(M+2)x(N+2)大小，再做3x3卷积后输出MxN。正是这种设置，导致Conv layers中的conv层不改变输入和输出矩阵大小。如下图：</p>
-<center><img src="/images/faster-rcnn/MN.png" width="80%"></center>
+<center><img src="/images/ssd/network.png" width="100%"></center>
 
-<p>类似的是，Conv layers中的pooling层kernel_size=2，stride=2。这样每个经过pooling层的MxN矩阵，都会变为(M/2)*(N/2)大小。综上所述，在整个Conv layers中，conv和relu层不改变输入输出大小，只有pooling层使输出长宽都变为输入的1/2。</p>
-<p>那么，一个MxN大小的矩阵经过Conv layers固定变为(M/16)x(N/16)！这样Conv layers生成的featuure map中都可以和原图对应起来。</p>
-<h2 id="Region-Proposal-Networks-RPN"><a href="#Region-Proposal-Networks-RPN" class="headerlink" title="Region Proposal Networks (RPN)"></a>Region Proposal Networks (RPN)</h2><p>经典的检测方法生成检测框都非常耗时，如OpenCV adaboost使用滑动窗口+图像金字塔生成检测框；或如RCNN使用SS(Selective Search)方法生成检测框。而Faster RCNN则抛弃了传统的滑动窗口和SS方法，直接使用RPN生成检测框，这也是Faster RCNN的巨大优势，能极大提升检测框的生成速度。</p>
-<center><img src="/images/faster-rcnn/rpn.png" width="80%"></center>
+<h1 id="SSD网络训练技巧"><a href="#SSD网络训练技巧" class="headerlink" title="SSD网络训练技巧"></a>SSD网络训练技巧</h1><p>SSD能达到这么高的检测精度离不开它所采用的训练技巧。</p>
+<center><img src="/images/ssd/tricks.png" width="70%"></center>
 
-<p>上图展示了RPN网络的具体结构。可以看到RPN网络实际分为2条线，上面一条通过softmax分类anchors获得foreground和background（检测目标是foreground），下面一条用于计算对于anchors的bounding box regression偏移量，以获得精确的proposal。而最后的Proposal层则负责综合foreground anchors和bounding box regression偏移量获取proposals，同时剔除太小和超出边界的proposals。其实整个网络到了Proposal Layer这里，就完成了相当于目标定位的功能。</p>
-<h2 id="RoI-pooling"><a href="#RoI-pooling" class="headerlink" title="RoI pooling"></a>RoI pooling</h2><p>RoI Pooling层则负责收集proposal，并计算出proposal feature maps，送入后续网络。从图3中可以看到Rol pooling层有2个输入：</p>
+<h2 id="1-数据增强"><a href="#1-数据增强" class="headerlink" title="1. 数据增强"></a>1. 数据增强</h2><p>SSD训练过程中使用的数据增强对网络性能影响很大，大约有6.7%的mAP提升。</p>
 <ol>
-<li>原始的feature maps</li>
-<li>RPN输出的proposal boxes（大小各不相同）</li>
+<li>随机剪裁：采样一个片段，使剪裁部分与目标重叠分别为0.1, 0.3, 0.5, 0.7, 0.9，剪裁完resize到固定尺寸。</li>
+<li>以0.5的概率随机水平翻转。</li>
 </ol>
-<h2 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h2><p>Classification部分利用已经获得的proposal feature maps，通过full connect层与softmax计算每个proposal具体属于那个类别（如人，车，电视等），输出cls_prob概率向量；同时再次利用bounding box regression获得每个proposal的位置偏移量bbox_pred，用于回归更加精确的目标检测框。Classification部分网络结构如下图：</p>
-<center><img src="/images/faster-rcnn/cls.png" width="80%"></center>
-
-<p>从PoI Pooling获取到7x7=49大小的proposal feature maps后，送入后续网络，可以看到做了如下2件事：</p>
-<ol>
-<li>通过全连接和softmax对proposals进行分类，这实际上已经是识别的范畴了</li>
-<li>再次对proposals进行bounding box regression，获取更高精度的rect box</li>
-</ol>
+<h2 id="2-是否在基础网络部分的conv4-3进行检测"><a href="#2-是否在基础网络部分的conv4-3进行检测" class="headerlink" title="2. 是否在基础网络部分的conv4_3进行检测"></a>2. 是否在基础网络部分的conv4_3进行检测</h2><p>基础网络部分特征图分辨率高，原图中信息更完整，感受野较小，可以用来检测图像中的小目标，这也是SSD相对于YOLO检测小目标的优势所在。增加对基础网络conv4_3的特征图的检测可以使mAP提升4%。</p>
+<h2 id="3-使用瘦高与宽扁默认框"><a href="#3-使用瘦高与宽扁默认框" class="headerlink" title="3. 使用瘦高与宽扁默认框"></a>3. 使用瘦高与宽扁默认框</h2><p>数据集中目标的开关往往各式各样，因此挑选合适形状的默认框能够提高检测效果。作者实验得出使用瘦高与宽扁默认框相对于只使用正方形默认框有2.9%mAP提升。</p>
+<h2 id="4-使用atrous卷积"><a href="#4-使用atrous卷积" class="headerlink" title="4. 使用atrous卷积"></a>4. 使用atrous卷积</h2><p>通常卷积过程中为了使特征图尺寸特征图尺寸保持不变，通过会在边缘打padding，但人为加入的padding值会引入噪声，因此，使用atrous卷积能够在保持感受野不变的条件下，减少padding噪声，关于atrous参考。本文SSD训练过程中并且没有使用atrous卷积，但预训练过程使用的模型为VGG-16-atrous，意味着作者给的预训练模型是使用atrous卷积训练出来的。使用atrous版本VGG-16作为预训模型比较普通VGG-16要提高0.7%mAP。</p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
-<li><a href="https://arxiv.org/abs/1506.01497" target="_blank" rel="noopener">Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks</a></li>
-<li><a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="noopener">Caffe源码实现，Python版本</a></li>
-<li><a href="https://github.com/ShaoqingRen/faster_rcnn" target="_blank" rel="noopener">Caffe源码实现，Matlab版本</a></li>
-<li><a href="http://blog.csdn.net/wfei101/article/details/76400672" target="_blank" rel="noopener">faster-RCNN算法原理详解</a></li>
+<li><a href="https://arxiv.org/abs/1512.02325" target="_blank" rel="noopener">SSD: Single Shot MultiBox Detector (ECCV, 2016)</a></li>
+<li><a href="https://www.cnblogs.com/fariver/p/7347197.html" target="_blank" rel="noopener">[目标检测]SSD原理</a></li>
 </ol>
 
       
@@ -517,8 +495,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/15/Fast-R-CNN/" rel="next" title="Fast R-CNN">
-                <i class="fa fa-chevron-left"></i> Fast R-CNN
+              <a href="/2018/04/21/YOLO/" rel="next" title="YOLO">
+                <i class="fa fa-chevron-left"></i> YOLO
               </a>
             
           </div>
@@ -526,10 +504,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/21/博客导航/" rel="prev" title="博客导航">
-                博客导航 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -683,7 +657,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Faster-R-CNN"><span class="nav-text">Faster R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Conv-layers"><span class="nav-text">Conv layers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-Proposal-Networks-RPN"><span class="nav-text">Region Proposal Networks (RPN)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RoI-pooling"><span class="nav-text">RoI pooling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Classification"><span class="nav-text">Classification</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SSD网络训练技巧"><span class="nav-text">SSD网络训练技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据增强"><span class="nav-text">1. 数据增强</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-是否在基础网络部分的conv4-3进行检测"><span class="nav-text">2. 是否在基础网络部分的conv4_3进行检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用瘦高与宽扁默认框"><span class="nav-text">3. 使用瘦高与宽扁默认框</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-使用atrous卷积"><span class="nav-text">4. 使用atrous卷积</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

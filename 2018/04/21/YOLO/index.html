@@ -77,24 +77,27 @@
 
 
 
-<meta name="description" content="Faster R-CCN已经将特征提取(feature extraction)，proposal提取，bounding box regression，classification都整合在了一个网络中，使得综合性能有较大提高，在检测速度方面尤为明显。">
+<meta name="description" content="YOLO将物体检测作为一个回归问题进行求解，输入图像经过一次inference，便能得到图像中所有物体的位置和其所属类别及相应的置信概率。而rcnn/fast rcnn/faster rcnn将检测结果分为两部分求解：物体类别（分类问题），物体位置即bounding box（回归问题）。">
 <meta name="keywords" content="Deep learning,CNN,Object detection">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Faster R-CNN">
-<meta property="og:url" content="http://yoursite.com/2018/04/15/Faster-R-CNN/index.html">
+<meta property="og:title" content="YOLO">
+<meta property="og:url" content="http://yoursite.com/2018/04/21/YOLO/index.html">
 <meta property="og:site_name" content="Chao Ouyang&#39;s Blog">
-<meta property="og:description" content="Faster R-CCN已经将特征提取(feature extraction)，proposal提取，bounding box regression，classification都整合在了一个网络中，使得综合性能有较大提高，在检测速度方面尤为明显。">
+<meta property="og:description" content="YOLO将物体检测作为一个回归问题进行求解，输入图像经过一次inference，便能得到图像中所有物体的位置和其所属类别及相应的置信概率。而rcnn/fast rcnn/faster rcnn将检测结果分为两部分求解：物体类别（分类问题），物体位置即bounding box（回归问题）。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/faster-rcnn.png">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/vgg16.png">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/MN.png">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/rpn.png">
-<meta property="og:image" content="http://yoursite.com/images/faster-rcnn/cls.png">
-<meta property="og:updated_time" content="2018-04-15T03:43:10.662Z">
+<meta property="og:image" content="http://yoursite.com/images/yolo/yolo.png">
+<meta property="og:image" content="http://yoursite.com/images/yolo/architecture.png">
+<meta property="og:image" content="http://yoursite.com/images/yolo/grid.gif">
+<meta property="og:image" content="http://yoursite.com/images/yolo/confidence.gif">
+<meta property="og:image" content="http://yoursite.com/images/yolo/tensor.gif">
+<meta property="og:image" content="http://yoursite.com/images/yolo/loss.png">
+<meta property="og:image" content="http://yoursite.com/images/yolo/bbox.png">
+<meta property="og:image" content="http://yoursite.com/images/yolo/inference.png">
+<meta property="og:updated_time" content="2018-04-21T15:11:00.705Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Faster R-CNN">
-<meta name="twitter:description" content="Faster R-CCN已经将特征提取(feature extraction)，proposal提取，bounding box regression，classification都整合在了一个网络中，使得综合性能有较大提高，在检测速度方面尤为明显。">
-<meta name="twitter:image" content="http://yoursite.com/images/faster-rcnn/faster-rcnn.png">
+<meta name="twitter:title" content="YOLO">
+<meta name="twitter:description" content="YOLO将物体检测作为一个回归问题进行求解，输入图像经过一次inference，便能得到图像中所有物体的位置和其所属类别及相应的置信概率。而rcnn/fast rcnn/faster rcnn将检测结果分为两部分求解：物体类别（分类问题），物体位置即bounding box（回归问题）。">
+<meta name="twitter:image" content="http://yoursite.com/images/yolo/yolo.png">
 
 
 
@@ -124,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/15/Faster-R-CNN/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/21/YOLO/"/>
 
 
 
 
 
-  <title>Faster R-CNN | Chao Ouyang's Blog</title>
+  <title>YOLO | Chao Ouyang's Blog</title>
   
 
 
@@ -301,7 +304,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/15/Faster-R-CNN/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/21/YOLO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chao Ouyang">
@@ -318,7 +321,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Faster R-CNN</h1>
+          <h1 class="post-title" itemprop="name headline">YOLO</h1>
         
 
         <div class="post-meta">
@@ -331,8 +334,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-15T11:28:29+08:00">
-                2018-04-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-21T23:07:39+08:00">
+                2018-04-21
               </time>
             
 
@@ -347,8 +350,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-04-15T11:43:10+08:00">
-                2018-04-15
+              <time title="更新于" itemprop="dateModified" datetime="2018-04-21T23:11:00+08:00">
+                2018-04-21
               </time>
             
           </span>
@@ -397,7 +400,7 @@
                   <span class="post-meta-item-text">字数统计 &#58;</span>
                 
                 <span title="字数统计">
-                  1,142
+                  2,143
                 </span>
               
 
@@ -413,7 +416,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  8
                 </span>
               
             </div>
@@ -435,53 +438,82 @@
 
       
         <blockquote>
-<p>Faster R-CCN已经将特征提取(feature extraction)，proposal提取，bounding box regression，classification都整合在了一个网络中，使得综合性能有较大提高，在检测速度方面尤为明显。</p>
+<p>YOLO将物体检测作为一个回归问题进行求解，输入图像经过一次inference，便能得到图像中所有物体的位置和其所属类别及相应的置信概率。而rcnn/fast rcnn/faster rcnn将检测结果分为两部分求解：物体类别（分类问题），物体位置即bounding box（回归问题）。</p>
 </blockquote>
 <a id="more"></a>
-<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>如下图所示，Faster R-CNN其实可以分为4个主要内容：</p>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>YOLO之前的物体检测系统使用分类器来完成物体检测任务。为了检测一个物体，这些物体检测系统要在一张测试图的不同位置和不同尺寸的bounding box上使用该物体的分类器去评估是否有该物体。如DPM系统，要使用一个滑窗（sliding window）在整张图像上均匀滑动，用分类器评估是否有物体。</p>
+<p>在DPM之后提出的其他方法，如R-CNN方法使用region proposal来生成整张图像中可能包含待检测物体的potential bounding boxes，然后用分类器来评估这些boxes，接着通过post-processing来改善bounding boxes，消除重复的检测目标，并基于整个场景中的其他物体重新对boxes进行打分。整个流程执行下来很慢，而且因为这些环节都是分开训练的，检测性能很难进行优化。</p>
+<p>作者设计了YOLO（you only look once），将物体检测任务当做回归问题（regression problem）来处理，直接通过整张图片的所有像素得到bounding box的坐标、box中包含物体的置信度和class probabilities。通过YOLO，每张图像只需要看一眼就能得出图像中都有哪些物体和这些物体的位置。</p>
+<center><img src="/images/yolo/yolo.png" width="100%"></center>
+
+<p>如图所示，使用YOLO来检测物体，其流程是非常简单明了的：<br>1、将图像resize到448 * 448作为神经网络的输入；<br>2、运行神经网络，得到一些bounding box坐标、box中包含物体的置信度和class probabilities；<br>3、进行非极大值抑制，筛选Boxes。</p>
+<h1 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h1><p>YOLO检测网络包括24个卷积层和2个全连接层，如下图所示。</p>
+<center><img src="/images/yolo/architecture.png" width="100%"></center>
+
+<p>其中，卷积层用来提取图像特征，全连接层用来预测图像位置和类别概率值。YOLO网络借鉴了GoogLeNet分类网络结构。不同的是，YOLO未使用inception module，而是使用1x1卷积层（此处1x1卷积层的存在是为了跨通道信息整合）+3x3卷积层简单替代。</p>
+<h1 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h1><p>YOLO将输入图像划分为S*S的栅格，每个栅格负责检测中心落在该栅格中的物体,每一个栅格预测B个bounding boxes，以及这些bounding boxes的confidence scores。这个 confidence scores反映了模型对于这个栅格的预测：该栅格是否含有物体，以及这个box的坐标预测的有多准。公式定义如下： </p>
+<p>$$confidence = Pr(Object) * IOU_{pred}^{truth}$$</p>
+<p>如果这个栅格中不存在一个 object，则confidence score应该为0；否则的话，confidence score则为 predicted bounding box与 ground truth box之间的 IOU（intersection over union）。</p>
+<p>YOLO对每个bounding box有5个predictions：x, y, w, h, and confidence。 </p>
 <ul>
-<li>Conv layers。作为一种CNN网络目标检测方法，Faster R-CNN首先使用一组基础的conv+relu+pooling层提取image的feature maps。该feature maps被共享用于后续RPN层和全连接层。</li>
-<li>Region Proposal Networks。RPN网络用于生成region proposals。该层通过softmax判断anchors属于foreground或者background，再利用bounding box regression修正anchors获得精确的proposals。</li>
-<li>Roi Pooling。该层收集输入的feature maps和proposals，综合这些信息后提取proposal feature maps，送入后续全连接层判定目标类别。</li>
-<li>Classification。利用proposal feature maps计算proposal的类别，同时再次bounding box regression获得检测框最终的精确位置。</li>
+<li>坐标x,y代表了预测的bounding box的中心与栅格边界的相对值。 </li>
+<li>坐标w,h代表了预测的bounding box的width、height相对于整幅图像width,height的比例。 </li>
+<li>confidence就是预测的bounding box和ground truth box的IOU值。 </li>
 </ul>
-<center><img src="/images/faster-rcnn/faster-rcnn.png" width="60%"></center>
+<center><img src="/images/yolo/grid.gif" width="100%"></center>
 
-<h1 id="Faster-R-CNN"><a href="#Faster-R-CNN" class="headerlink" title="Faster R-CNN"></a>Faster R-CNN</h1><p>下图展示了Python版本中的VGG16模型中的faster_rcnn_test.pt的网络结构，可以清晰的看到该网络对于一副任意大小PxQ的图像，首先缩放至固定大小MxN，然后将MxN图像送入网络；而Conv layers中包含了13个conv层+13个relu层+4个pooling层；RPN网络首先经过3x3卷积，再分别生成foreground anchors与bounding box regression偏移量，然后计算出proposals；而Roi Pooling层则利用proposals从feature maps中提取proposal feature送入后续全连接和softmax网络作classification（即分类proposal到底是什么object）。</p>
-<center><img src="/images/faster-rcnn/vgg16.png" width="90%"></center>
+<p>每一个栅格还要预测C个 conditional class probability（条件类别概率）：Pr(Classi|Object)。即在一个栅格包含一个Object的前提下，它属于某个类的概率。我们只为每个栅格预测一组（C个）类概率，而不考虑框B的数量。</p>
+<blockquote>
+<p>注意：<br>conditional class probability信息是针对每个网格的。<br>confidence信息是针对每个bounding box的。</p>
+</blockquote>
+<p>在测试阶段，将每个栅格的conditional class probabilities与每个 bounding box的 confidence相乘： </p>
+<p>$$Pr(Class_i|Object) <em> Pr(Object) </em> IOU_{pred}^{truth} = Pr(Class_i) * IOU_{pred}^{truth}$$</p>
+<p>这样就得到了每个bounding box的具体类别的confidence score。这乘积既包含了bounding box中预测的class的 probability信息，也反映了bounding box是否含有Object和bounding box坐标的准确度。</p>
+<center><img src="/images/yolo/confidence.gif" width="100%"></center>
 
-<h2 id="Conv-layers"><a href="#Conv-layers" class="headerlink" title="Conv layers"></a>Conv layers</h2><p>Conv layers包含了conv，pooling，relu三种层。以python版本中的VGG16模型中的faster_rcnn_test.pt的网络结构为例，如图2，Conv layers部分共有13个conv层，13个relu层，4个pooling层。这里有一个非常容易被忽略但是又无比重要的信息，在Conv layers中：</p>
+<p>将YOLO用于PASCAL VOC数据集时：<br>论文使用的 S=7，即将一张图像分为7×7=49个栅格每一个栅格预测B=2个boxes（每个box有 x,y,w,h,confidence，5个预测值），同时C=20（PASCAL数据集中有20个类别）。<br>因此，最后的prediction是7×7×30 { 即S <em> S </em> ( B * 5 + C) }的Tensor。</p>
+<center><img src="/images/yolo/tensor.gif" width="100%"></center>
+
+<h1 id="Loss"><a href="#Loss" class="headerlink" title="Loss"></a>Loss</h1><p>损失函数的设计目标就是让坐标（x,y,w,h），confidence，classification 这个三个方面达到很好的平衡。简单的全部采用了sum-squared error loss来做这件事会有以下不足： </p>
 <ol>
-<li>所有的conv层都是：kernel_size=3，pad=1</li>
-<li>所有的pooling层都是：kernel_size=2，stride=2</li>
+<li>8维的localization error和20维的classification error同等重要显然是不合理的。 </li>
+<li>如果一些栅格中没有object（一幅图中这种栅格很多），那么就会将这些栅格中的bounding box的confidence 置为0，相比于较少的有object的栅格，这些不包含物体的栅格对梯度更新的贡献会远大于包含物体的栅格对梯度更新的贡献，这会导致网络不稳定甚至发散。</li>
 </ol>
-<p>为何重要？在Faster RCNN Conv layers中对所有的卷积都做了扩边处理（pad=1，即填充一圈0），导致原图变为(M+2)x(N+2)大小，再做3x3卷积后输出MxN。正是这种设置，导致Conv layers中的conv层不改变输入和输出矩阵大小。如下图：</p>
-<center><img src="/images/faster-rcnn/MN.png" width="80%"></center>
+<center><img src="/images/yolo/loss.png" width="100%"></center>
 
-<p>类似的是，Conv layers中的pooling层kernel_size=2，stride=2。这样每个经过pooling层的MxN矩阵，都会变为(M/2)*(N/2)大小。综上所述，在整个Conv layers中，conv和relu层不改变输入输出大小，只有pooling层使输出长宽都变为输入的1/2。</p>
-<p>那么，一个MxN大小的矩阵经过Conv layers固定变为(M/16)x(N/16)！这样Conv layers生成的featuure map中都可以和原图对应起来。</p>
-<h2 id="Region-Proposal-Networks-RPN"><a href="#Region-Proposal-Networks-RPN" class="headerlink" title="Region Proposal Networks (RPN)"></a>Region Proposal Networks (RPN)</h2><p>经典的检测方法生成检测框都非常耗时，如OpenCV adaboost使用滑动窗口+图像金字塔生成检测框；或如RCNN使用SS(Selective Search)方法生成检测框。而Faster RCNN则抛弃了传统的滑动窗口和SS方法，直接使用RPN生成检测框，这也是Faster RCNN的巨大优势，能极大提升检测框的生成速度。</p>
-<center><img src="/images/faster-rcnn/rpn.png" width="80%"></center>
+<p>解决方案如下： </p>
+<ul>
+<li>更重视8维的坐标预测，给这些损失前面赋予更大的loss weight, 记为 λcoord ,在pascal VOC训练中取5。（上图蓝色框） </li>
+<li>对没有object的bbox的confidence loss，赋予小的loss weight，记为 λnoobj ，在pascal VOC训练中取0.5。（上图橙色框） </li>
+<li>有object的bbox的confidence loss (上图红色框) 和类别的loss （上图紫色框）的loss weight正常取1。</li>
+</ul>
+<p>对不同大小的bbox预测中，相比于大bbox预测偏一点，小box预测偏相同的尺寸对IOU的影响更大。而sum-square error loss中对同样的偏移loss是一样。<br>为了缓和这个问题，作者用了一个巧妙的办法，就是将box的width和height取平方根代替原本的height和width。 如下图：small bbox的横轴值较小，发生偏移时，反应到y轴上的loss（下图绿色）比big box(下图红色)要大。</p>
+<center><img src="/images/yolo/bbox.png" width="100%"></center>
 
-<p>上图展示了RPN网络的具体结构。可以看到RPN网络实际分为2条线，上面一条通过softmax分类anchors获得foreground和background（检测目标是foreground），下面一条用于计算对于anchors的bounding box regression偏移量，以获得精确的proposal。而最后的Proposal层则负责综合foreground anchors和bounding box regression偏移量获取proposals，同时剔除太小和超出边界的proposals。其实整个网络到了Proposal Layer这里，就完成了相当于目标定位的功能。</p>
-<h2 id="RoI-pooling"><a href="#RoI-pooling" class="headerlink" title="RoI pooling"></a>RoI pooling</h2><p>RoI Pooling层则负责收集proposal，并计算出proposal feature maps，送入后续网络。从图3中可以看到Rol pooling层有2个输入：</p>
+<p>在 YOLO中，每个栅格预测多个bounding box，但在网络模型的训练中，希望每一个物体最后由一个bounding box predictor来负责预测。因此，当前哪一个predictor预测的bounding box与ground truth box的IOU最大，这个 predictor就负责 predict object。这会使得每个predictor可以专门的负责特定的物体检测。随着训练的进行，每一个 predictor对特定的物体尺寸、长宽比的物体的类别的预测会越来越好。</p>
+<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p>YOLO模型训练分为两步：</p>
 <ol>
-<li>原始的feature maps</li>
-<li>RPN输出的proposal boxes（大小各不相同）</li>
+<li>预训练。使用ImageNet 1000类数据训练YOLO网络的前20个卷积层+1个average池化层+1个全连接层。训练图像分辨率resize到224x224。</li>
+<li>用步骤1得到的前20个卷积层网络参数来初始化YOLO模型前20个卷积层的网络参数，然后用VOC 20类标注数据进行YOLO模型训练。为提高图像精度，在训练检测模型时，将输入图像分辨率resize到448x448。</li>
 </ol>
-<h2 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h2><p>Classification部分利用已经获得的proposal feature maps，通过full connect层与softmax计算每个proposal具体属于那个类别（如人，车，电视等），输出cls_prob概率向量；同时再次利用bounding box regression获得每个proposal的位置偏移量bbox_pred，用于回归更加精确的目标检测框。Classification部分网络结构如下图：</p>
-<center><img src="/images/faster-rcnn/cls.png" width="80%"></center>
+<h1 id="Inference"><a href="#Inference" class="headerlink" title="Inference"></a>Inference</h1><center><img src="/images/yolo/inference.png" width="100%"></center>
 
-<p>从PoI Pooling获取到7x7=49大小的proposal feature maps后，送入后续网络，可以看到做了如下2件事：</p>
+<p>虽然每个格子可以预测B个bounding box，但是最终只选择只选择IOU最高的bounding box作为物体检测输出，即每个格子最多只预测出一个物体。当物体占画面比例较小，如图像中包含畜群或鸟群时，每个格子包含多个物体，但却只能检测出其中一个。这是YOLO方法的一个缺陷。</p>
+<h1 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h1><p>优点：</p>
 <ol>
-<li>通过全连接和softmax对proposals进行分类，这实际上已经是识别的范畴了</li>
-<li>再次对proposals进行bounding box regression，获取更高精度的rect box</li>
+<li>快。YOLO将物体检测作为回归问题进行求解，整个检测网络pipeline简单。在titan x GPU上，在保证检测准确率的前提下（63.4% mAP，VOC 2007 test set），可以达到45fps的检测速度。</li>
+<li>背景误检率低。YOLO在训练和推理过程中能‘看到’整张图像的整体信息，而基于region proposal的物体检测方法（如rcnn/fast rcnn），在检测过程中，只‘看到’候选框内的局部图像信息。因此，若当图像背景（非物体）中的部分数据被包含在候选框中送入检测网络进行检测时，容易被误检测成物体。测试证明，YOLO对于背景图像的误检率低于fast rcnn误检率的一半。</li>
+<li>通用性强。YOLO对于艺术类作品中的物体检测同样适用。它对非自然图像物体的检测率远远高于DPM和RCNN系列检测方法。</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>识别物体位置精准性差。</li>
+<li>召回率低。</li>
 </ol>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
-<li><a href="https://arxiv.org/abs/1506.01497" target="_blank" rel="noopener">Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks</a></li>
-<li><a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="noopener">Caffe源码实现，Python版本</a></li>
-<li><a href="https://github.com/ShaoqingRen/faster_rcnn" target="_blank" rel="noopener">Caffe源码实现，Matlab版本</a></li>
-<li><a href="http://blog.csdn.net/wfei101/article/details/76400672" target="_blank" rel="noopener">faster-RCNN算法原理详解</a></li>
+<li><a href="https://arxiv.org/abs/1506.02640" target="_blank" rel="noopener">You Only Look Once: Unified, Real-Time Object Detection (CVPR, 2016)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/25236464" target="_blank" rel="noopener">YOLO详解</a></li>
+<li><a href="http://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">YOLOv1论文理解</a></li>
 </ol>
 
       
@@ -517,8 +549,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/15/Fast-R-CNN/" rel="next" title="Fast R-CNN">
-                <i class="fa fa-chevron-left"></i> Fast R-CNN
+              <a href="/2018/04/21/博客导航/" rel="next" title="博客导航">
+                <i class="fa fa-chevron-left"></i> 博客导航
               </a>
             
           </div>
@@ -527,8 +559,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/21/博客导航/" rel="prev" title="博客导航">
-                博客导航 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/21/SSD/" rel="prev" title="SSD">
+                SSD <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -683,7 +715,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Faster-R-CNN"><span class="nav-text">Faster R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Conv-layers"><span class="nav-text">Conv layers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-Proposal-Networks-RPN"><span class="nav-text">Region Proposal Networks (RPN)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RoI-pooling"><span class="nav-text">RoI pooling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Classification"><span class="nav-text">Classification</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Architecture"><span class="nav-text">Architecture</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#YOLO"><span class="nav-text">YOLO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Loss"><span class="nav-text">Loss</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Training"><span class="nav-text">Training</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Inference"><span class="nav-text">Inference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优缺点"><span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
