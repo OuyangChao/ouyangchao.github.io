@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Deep learning,CNN,Object detection," />
 
 
 
@@ -77,17 +77,22 @@
 
 
 
-<meta name="description" content="为方便浏览本博客的信息，建立了博客导航。">
+<meta name="description" content="R-FCN是在Faster R-CNN的框架上进行改造，第一，把base network由VGG16换成了ResNet，第二，把Fast R-CNN换成了先用卷积做prediction，再进行ROI pooling。由于ROI pooling会丢失位置信息，故在pooling前加入位置信息，即指定不同score map负责检测目标的不同位置。pooling后把不同位置得到的score map进行">
+<meta name="keywords" content="Deep learning,CNN,Object detection">
 <meta property="og:type" content="article">
-<meta property="og:title" content="博客导航">
-<meta property="og:url" content="http://yoursite.com/2018/04/21/博客导航/index.html">
+<meta property="og:title" content="R-FCN">
+<meta property="og:url" content="http://yoursite.com/2018/04/23/R-FCN/index.html">
 <meta property="og:site_name" content="Chao Ouyang&#39;s Blog">
-<meta property="og:description" content="为方便浏览本博客的信息，建立了博客导航。">
+<meta property="og:description" content="R-FCN是在Faster R-CNN的框架上进行改造，第一，把base network由VGG16换成了ResNet，第二，把Fast R-CNN换成了先用卷积做prediction，再进行ROI pooling。由于ROI pooling会丢失位置信息，故在pooling前加入位置信息，即指定不同score map负责检测目标的不同位置。pooling后把不同位置得到的score map进行">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-21T15:18:41.593Z">
+<meta property="og:image" content="http://yoursite.com/images/r-fcn/depth.png">
+<meta property="og:image" content="http://yoursite.com/images/r-fcn/key-idea.png">
+<meta property="og:image" content="http://yoursite.com/images/r-fcn/vis.png">
+<meta property="og:updated_time" content="2018-04-23T11:56:07.219Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="博客导航">
-<meta name="twitter:description" content="为方便浏览本博客的信息，建立了博客导航。">
+<meta name="twitter:title" content="R-FCN">
+<meta name="twitter:description" content="R-FCN是在Faster R-CNN的框架上进行改造，第一，把base network由VGG16换成了ResNet，第二，把Fast R-CNN换成了先用卷积做prediction，再进行ROI pooling。由于ROI pooling会丢失位置信息，故在pooling前加入位置信息，即指定不同score map负责检测目标的不同位置。pooling后把不同位置得到的score map进行">
+<meta name="twitter:image" content="http://yoursite.com/images/r-fcn/depth.png">
 
 
 
@@ -117,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/21/博客导航/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/23/R-FCN/"/>
 
 
 
 
 
-  <title>博客导航 | Chao Ouyang's Blog</title>
+  <title>R-FCN | Chao Ouyang's Blog</title>
   
 
 
@@ -294,7 +299,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/21/博客导航/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/23/R-FCN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chao Ouyang">
@@ -311,15 +316,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">博客导航</h1>
+          <h1 class="post-title" itemprop="name headline">R-FCN</h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            
-              <i class="fa fa-thumb-tack"></i>
-              <font color=0000CD>置顶</font>
-              <span class="post-meta-divider">|</span>
             
             
               <span class="post-meta-item-icon">
@@ -328,8 +329,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-21T22:25:47+08:00">
-                2018-04-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-23T19:25:44+08:00">
+                2018-04-23
               </time>
             
 
@@ -344,12 +345,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-04-21T23:18:41+08:00">
-                2018-04-21
+              <time title="更新于" itemprop="dateModified" datetime="2018-04-23T19:56:07+08:00">
+                2018-04-23
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">论文笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -372,7 +395,7 @@
                   <span class="post-meta-item-text">字数统计 &#58;</span>
                 
                 <span title="字数统计">
-                  77
+                  1,388
                 </span>
               
 
@@ -388,7 +411,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  5
                 </span>
               
             </div>
@@ -410,15 +433,44 @@
 
       
         <blockquote>
-<p>为方便浏览本博客的信息，建立了博客导航。</p>
+<p><strong>R-FCN</strong>是在Faster R-CNN的框架上进行改造，第一，把base network由VGG16换成了ResNet，第二，把Fast R-CNN换成了先用卷积做prediction，再进行ROI pooling。由于ROI pooling会丢失位置信息，故在pooling前加入位置信息，即指定不同score map负责检测目标的不同位置。pooling后把不同位置得到的score map进行组合就能复现原来的位置信息。</p>
 </blockquote>
 <a id="more"></a>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>分类需要特征具有平移不变性，检测则要求对目标的平移做出准确响应。现在的大部分CNN在分类上可以做的很好，但用在检测上效果不佳。SPP，Faster R-CNN类的方法在ROI pooling前都是卷积，是具备平移不变性的，但一旦插入ROI pooling之后，后面的网络结构就不再具备平移不变性了。因此，本文想提出来的position sensitive score map这个概念是能把目标的位置信息融合进ROI pooling。</p>
+<p>对于region-based的检测方法，以Faster R-CNN为例，实际上是分成了几个subnetwork，第一个用来在整张图上做比较耗时的conv，这些操作与region无关，是计算共享的。第二个subnetwork是用来产生候选的boundingbox（如RPN），第三个subnetwork用来分类或进一步对box进行regression（如Fast RCNN），这个subnetwork和region是有关系的，必须每个region单独跑网络，衔接在这个subnetwork和前两个subnetwork中间的就是ROI pooling。我们希望的是，耗时的卷积都尽量移到前面共享的subnetwork上。因此，和Faster RCNN中用的ResNet（前91层共享，插入ROI pooling，后10层不共享）策略不同，本文把所有的101层都放在了前面共享的subnetwork。最后用来prediction的卷积只有1层，大大减少了计算量。</p>
+<center><img src="/images/r-fcn/depth.png" width="80%"></center>
+
+<h1 id="R-FCN"><a href="#R-FCN" class="headerlink" title="R-FCN"></a>R-FCN</h1><center><img src="/images/r-fcn/key-idea.png" width="90%"></center>
+
 <ul>
-<li><p>卷积神经网络结构相关<br><a href="https://ouyangchao.github.io/2018/04/12/Spatial-Transformer-Networks/" target="_blank" rel="noopener">论文笔记：Spatial Transformer Networks</a></p>
+<li><p>Backbone architecture: ResNet 101——去掉原始ResNet101的最后一层全连接层，保留前100层，再接一个<code>1*1*1024</code>的全卷积层（100层输出是2048，为了降维，引入了一个1*1的卷积层）。</p>
 </li>
-<li><p>目标检测相关<br><a href="https://ouyangchao.github.io/2018/04/14/R-CNN/" target="_blank" rel="noopener">论文笔记：R-CNN</a><br><a href="https://ouyangchao.github.io/2018/04/14/SPP-net/" target="_blank" rel="noopener">论文笔记：SPP-net</a><br><a href="https://ouyangchao.github.io/2018/04/15/Fast-R-CNN/" target="_blank" rel="noopener">论文笔记：Fast R-CNN</a><br><a href="https://ouyangchao.github.io/2018/04/15/Faster-R-CNN/" target="_blank" rel="noopener">论文笔记：Faster R-CNN</a><br><a href="https://ouyangchao.github.io/2018/04/21/YOLO/" target="_blank" rel="noopener">论文笔记：YOLO</a><br><a href="https://ouyangchao.github.io/2018/04/21/SSD/" target="_blank" rel="noopener">论文笔记：SSD</a></p>
+<li><p>$k^2(C+1)$的conv: ResNet 101的输出是<code>W*H*1024</code>，用$k^2(C+1)$个<code>1*1*1024</code>的卷积核去卷积即可得到$k^2(C+1)$个大小为<code>W*H</code>的position sensitive的score map。这步的卷积操作就是在做prediction。例如k = 3，表示把一个ROI划分成3*3，对应的9个位置分别是：上左（左上角），上中，上右，中左，中中，中右，下左，下中，下右（右下角）。</p>
+</li>
+<li><p>$k^2(C+1)$个feature map的物理意义: 共有<code>k*k = 9</code>个颜色，每个颜色的立体块<code>(W*H*(C+1))</code>表示的是不同位置存在目标的概率值（第一块黄色表示的是左上角位置，最后一块淡蓝色表示的是右下角位置）。共有$k^2*(C+1)$个feature map。每个feature map，z(i,j,c)是第i+k(j-1)个立体块上的第c个map（1&lt;= i,j &lt;=3）。(i,j)决定了9种位置的某一种位置，假设为左上角位置（i=j=1），c决定了哪一类，假设为person类。在z(i,j,c)这个feature map上的某一个像素的位置是（x,y），像素值是value，则value表示的是原图对应的(x,y)这个位置上可能是人（c=‘person’）且是人的左上部位（i=j=1）的概率值。</p>
+</li>
+<li><p>ROI pooling的输入和输出：ROI pooling操作的输入（对于C+1个类）是$k^2\times (C+1)\times W’\times H’$（W’和H’是ROI的宽度和高度）的score map上某ROI对应的那个立体块，且该立体块组成一个新的$k^2\times (C+1)\times W’\times H’$的立体块：每个颜色的立体块（C+1）都只抠出对应位置的一个bin，把这<code>k*k</code>个bin组成新的立体块，大小为$(C+1)\times W’\times H’$。例如，上图中的第一块黄色只取左上角的bin，最后一块淡蓝色只取右下角的bin。所有的bin重新组合后就变成了类似右图的那个薄的立体块（图中的这个是池化后的输出，即每个面上的每个bin上已经是一个像素。池化前这个bin对应的是一个区域，是多个像素）。ROI pooling的输出为为一个$(C+1)\times k\times k$的立体块。</p>
+</li>
+<li><p>vote投票：k*k个bin直接进行求和（每个类单独做）得到每一类的score，并进行softmax得到每类的最终得分，并用于计算损失。</p>
+</li>
+<li><p>训练的样本选择策略：online hard example mining (OHEM) 。主要思想就是对样本按loss进行排序，选择前面loss较小的，这个策略主要用来对负样本进行筛选，使得正负样本更加平衡。</p>
+</li>
+<li><p>两个关键层：</p>
+<ol>
+<li>包含多个 Score Map 的卷积层：把目标分割成了 <code>k*k</code> 个部分（比如3<em>3），每个部分映射到一张 Score Map 上，每个 Score Map 对应目标的一部分（如上图中的 top-left 左上角的 1/9）。最终得到 `k</em>k` 个Score Map，每一个 Map通道数为 分类个数 C+1。</li>
+<li>一个 ROI Pooling 层：这个 ROI 层仅针对上面的其中一个 Score Map 执行 Pooling 操作，重新排列成 <code>k*k</code>，通道数为 C+1。ROI Pooling 层通过 <code>k*k</code> 个 Part 进行投票，得到分类结果。</li>
+</ol>
+<center><img src="/images/r-fcn/vis.png" width="100%"></center>
+
 </li>
 </ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://arxiv.org/abs/1605.06409" target="_blank" rel="noopener">R-FCN: Object Detection via Region-based Fully Convolutional Networks</a></li>
+<li><a href="https://github.com/YuwenXiong/py-R-FCN" target="_blank" rel="noopener">Caffe源码实现，Python版本</a></li>
+<li><a href="https://github.com/daijifeng001/R-FCN" target="_blank" rel="noopener">Caffe源码实现，Matlab版本</a></li>
+<li><a href="http://blog.csdn.net/u014380165/article/details/72848254" target="_blank" rel="noopener">R-FCN算法及Caffe代码详解</a></li>
+<li><a href="http://blog.csdn.net/baidu_32173921/article/details/71741970" target="_blank" rel="noopener">RFCN论文笔记</a></li>
+</ol>
 
       
     </div>
@@ -434,6 +486,16 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Deep-learning/" rel="tag"><i class="fa fa-tag"></i> Deep learning</a>
+          
+            <a href="/tags/CNN/" rel="tag"><i class="fa fa-tag"></i> CNN</a>
+          
+            <a href="/tags/Object-detection/" rel="tag"><i class="fa fa-tag"></i> Object detection</a>
+          
+        </div>
+      
 
       
       
@@ -443,8 +505,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/15/Faster-R-CNN/" rel="next" title="Faster R-CNN">
-                <i class="fa fa-chevron-left"></i> Faster R-CNN
+              <a href="/2018/04/21/SSD/" rel="next" title="SSD">
+                <i class="fa fa-chevron-left"></i> SSD
               </a>
             
           </div>
@@ -452,10 +514,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/21/YOLO/" rel="prev" title="YOLO">
-                YOLO <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -507,8 +565,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -590,6 +657,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#R-FCN"><span class="nav-text">R-FCN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
