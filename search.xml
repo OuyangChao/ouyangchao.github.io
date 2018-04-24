@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[DSSD]]></title>
+    <url>%2F2018%2F04%2F24%2FDSSD%2F</url>
+    <content type="text"><![CDATA[通过增加context的信息来提高目标检测的准确率是一个常见的方法，在SSD当中，作者没有利用到context的信息，因此，作者在DSSD里面尝试通过加入context来改善SSD的性能。 Introduction在SSD的研究基础上，本文的主要贡献可分为两点：首先，把SSD的基准网络从VGG换成了Resnet-101，增强了特征提取能力；然后使用反卷积层（deconvolution layer ）增加了大量上下文信息。 下图基本上展示了论文的核心思想，也就是如何利用中间层的上下文信息。方法就是把红色层做反卷积操作，使其和上一级蓝色层尺度相同，再把二者融合在一起，得到的新的红色层用来做预测。如此反复，仍然形成多尺度检测框架。在图中越往后的红色层分辨率越高，而且包含的上下文信息越丰富，综合在一起，使得检测精度得以提升。 Deconvolution module为了整合浅层特征图和反卷积层的信息，作者引入了如下图所示的反卷积模块，该模块可以适合整个DSSD架构。作者受到论文Learning to Refine Object Segments的启发，认为用于精细网络的反卷积模块的分解结构达到的精度可以和复杂网络一样，并且更有效率。作者对其进行了一定的修改： 在每个卷积层后添加批归一化层； 使用基于学习的反卷积层而不是简单地双线性上采样； 作者测试了不同的结合方式，元素求和（element-wise sum）与元素点积（element-wise product）方式，实验证明点积计算能得到更好的精度。 Reference DSSD : Deconvolutional Single Shot Detector DSSD: Deconvolutional Single Shot Detector 论文笔记]]></content>
+      <categories>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>Deep learning</tag>
+        <tag>CNN</tag>
+        <tag>Object detection</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[R-FCN]]></title>
     <url>%2F2018%2F04%2F23%2FR-FCN%2F</url>
     <content type="text"><![CDATA[R-FCN是在Faster R-CNN的框架上进行改造，第一，把base network由VGG16换成了ResNet，第二，把Fast R-CNN换成了先用卷积做prediction，再进行ROI pooling。由于ROI pooling会丢失位置信息，故在pooling前加入位置信息，即指定不同score map负责检测目标的不同位置。pooling后把不同位置得到的score map进行组合就能复现原来的位置信息。 Introduction分类需要特征具有平移不变性，检测则要求对目标的平移做出准确响应。现在的大部分CNN在分类上可以做的很好，但用在检测上效果不佳。SPP，Faster R-CNN类的方法在ROI pooling前都是卷积，是具备平移不变性的，但一旦插入ROI pooling之后，后面的网络结构就不再具备平移不变性了。因此，本文想提出来的position sensitive score map这个概念是能把目标的位置信息融合进ROI pooling。 对于region-based的检测方法，以Faster R-CNN为例，实际上是分成了几个subnetwork，第一个用来在整张图上做比较耗时的conv，这些操作与region无关，是计算共享的。第二个subnetwork是用来产生候选的boundingbox（如RPN），第三个subnetwork用来分类或进一步对box进行regression（如Fast RCNN），这个subnetwork和region是有关系的，必须每个region单独跑网络，衔接在这个subnetwork和前两个subnetwork中间的就是ROI pooling。我们希望的是，耗时的卷积都尽量移到前面共享的subnetwork上。因此，和Faster RCNN中用的ResNet（前91层共享，插入ROI pooling，后10层不共享）策略不同，本文把所有的101层都放在了前面共享的subnetwork。最后用来prediction的卷积只有1层，大大减少了计算量。 R-FCN Backbone architecture: ResNet 101——去掉原始ResNet101的最后一层全连接层，保留前100层，再接一个1*1*1024的全卷积层（100层输出是2048，为了降维，引入了一个1*1的卷积层）。 $k^2(C+1)$的conv: ResNet 101的输出是W*H*1024，用$k^2(C+1)$个1*1*1024的卷积核去卷积即可得到$k^2(C+1)$个大小为W*H的position sensitive的score map。这步的卷积操作就是在做prediction。例如k = 3，表示把一个ROI划分成3*3，对应的9个位置分别是：上左（左上角），上中，上右，中左，中中，中右，下左，下中，下右（右下角）。 $k^2(C+1)$个feature map的物理意义: 共有k*k = 9个颜色，每个颜色的立体块(W*H*(C+1))表示的是不同位置存在目标的概率值（第一块黄色表示的是左上角位置，最后一块淡蓝色表示的是右下角位置）。共有$k^2*(C+1)$个feature map。每个feature map，z(i,j,c)是第i+k(j-1)个立体块上的第c个map（1&lt;= i,j &lt;=3）。(i,j)决定了9种位置的某一种位置，假设为左上角位置（i=j=1），c决定了哪一类，假设为person类。在z(i,j,c)这个feature map上的某一个像素的位置是（x,y），像素值是value，则value表示的是原图对应的(x,y)这个位置上可能是人（c=‘person’）且是人的左上部位（i=j=1）的概率值。 ROI pooling的输入和输出：ROI pooling操作的输入（对于C+1个类）是$k^2\times (C+1)\times W’\times H’$（W’和H’是ROI的宽度和高度）的score map上某ROI对应的那个立体块，且该立体块组成一个新的$k^2\times (C+1)\times W’\times H’$的立体块：每个颜色的立体块（C+1）都只抠出对应位置的一个bin，把这k*k个bin组成新的立体块，大小为$(C+1)\times W’\times H’$。例如，上图中的第一块黄色只取左上角的bin，最后一块淡蓝色只取右下角的bin。所有的bin重新组合后就变成了类似右图的那个薄的立体块（图中的这个是池化后的输出，即每个面上的每个bin上已经是一个像素。池化前这个bin对应的是一个区域，是多个像素）。ROI pooling的输出为为一个$(C+1)\times k\times k$的立体块。 vote投票：k*k个bin直接进行求和（每个类单独做）得到每一类的score，并进行softmax得到每类的最终得分，并用于计算损失。 训练的样本选择策略：online hard example mining (OHEM) 。主要思想就是对样本按loss进行排序，选择前面loss较小的，这个策略主要用来对负样本进行筛选，使得正负样本更加平衡。 两个关键层： 包含多个 Score Map 的卷积层：把目标分割成了 k*k 个部分（比如33），每个部分映射到一张 Score Map 上，每个 Score Map 对应目标的一部分（如上图中的 top-left 左上角的 1/9）。最终得到 `kk` 个Score Map，每一个 Map通道数为 分类个数 C+1。 一个 ROI Pooling 层：这个 ROI 层仅针对上面的其中一个 Score Map 执行 Pooling 操作，重新排列成 k*k，通道数为 C+1。ROI Pooling 层通过 k*k 个 Part 进行投票，得到分类结果。 Reference R-FCN: Object Detection via Region-based Fully Convolutional Networks Caffe源码实现，Python版本 Caffe源码实现，Matlab版本 R-FCN算法及Caffe代码详解 RFCN论文笔记]]></content>
@@ -42,7 +55,7 @@
   <entry>
     <title><![CDATA[博客导航]]></title>
     <url>%2F2018%2F04%2F21%2F%E5%8D%9A%E5%AE%A2%E5%AF%BC%E8%88%AA%2F</url>
-    <content type="text"><![CDATA[为方便浏览本博客的信息，建立了博客导航。 卷积神经网络结构相关论文笔记：Spatial Transformer Networks 目标检测相关论文笔记：R-CNN论文笔记：SPP-net论文笔记：Fast R-CNN论文笔记：Faster R-CNN论文笔记：YOLO论文笔记：SSD论文笔记：R-FCN]]></content>
+    <content type="text"><![CDATA[为方便浏览本博客的信息，建立了博客导航。 卷积神经网络结构相关论文笔记：Spatial Transformer Networks 目标检测相关论文笔记：R-CNN论文笔记：SPP-net论文笔记：Fast R-CNN论文笔记：Faster R-CNN论文笔记：YOLO论文笔记：SSD论文笔记：R-FCN论文笔记：DSSD]]></content>
   </entry>
   <entry>
     <title><![CDATA[Faster R-CNN]]></title>
