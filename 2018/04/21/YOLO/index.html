@@ -400,7 +400,7 @@
                   <span class="post-meta-item-text">字数统计 &#58;</span>
                 
                 <span title="字数统计">
-                  2,124
+                  2,143
                 </span>
               
 
@@ -452,7 +452,8 @@
 
 <p>其中，卷积层用来提取图像特征，全连接层用来预测图像位置和类别概率值。YOLO网络借鉴了GoogLeNet分类网络结构。不同的是，YOLO未使用inception module，而是使用1x1卷积层（此处1x1卷积层的存在是为了跨通道信息整合）+3x3卷积层简单替代。</p>
 <h1 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h1><p>YOLO将输入图像划分为S*S的栅格，每个栅格负责检测中心落在该栅格中的物体,每一个栅格预测B个bounding boxes，以及这些bounding boxes的confidence scores。这个 confidence scores反映了模型对于这个栅格的预测：该栅格是否含有物体，以及这个box的坐标预测的有多准。公式定义如下： </p>
-<script type="math/tex; mode=display">confidence = Pr(Object) * IOU_{pred}^{truth}</script><p>如果这个栅格中不存在一个 object，则confidence score应该为0；否则的话，confidence score则为 predicted bounding box与 ground truth box之间的 IOU（intersection over union）。</p>
+<p>$$confidence = Pr(Object) * IOU_{pred}^{truth}$$</p>
+<p>如果这个栅格中不存在一个 object，则confidence score应该为0；否则的话，confidence score则为 predicted bounding box与 ground truth box之间的 IOU（intersection over union）。</p>
 <p>YOLO对每个bounding box有5个predictions：x, y, w, h, and confidence。 </p>
 <ul>
 <li>坐标x,y代表了预测的bounding box的中心与栅格边界的相对值。 </li>
@@ -466,7 +467,8 @@
 <p>注意：<br>conditional class probability信息是针对每个网格的。<br>confidence信息是针对每个bounding box的。</p>
 </blockquote>
 <p>在测试阶段，将每个栅格的conditional class probabilities与每个 bounding box的 confidence相乘： </p>
-<script type="math/tex; mode=display">Pr(Class_i|Object) * Pr(Object) * IOU_{pred}^{truth} = Pr(Class_i) * IOU_{pred}^{truth}</script><p>这样就得到了每个bounding box的具体类别的confidence score。这乘积既包含了bounding box中预测的class的 probability信息，也反映了bounding box是否含有Object和bounding box坐标的准确度。</p>
+<p>$$Pr(Class_i|Object) <em> Pr(Object) </em> IOU_{pred}^{truth} = Pr(Class_i) * IOU_{pred}^{truth}$$</p>
+<p>这样就得到了每个bounding box的具体类别的confidence score。这乘积既包含了bounding box中预测的class的 probability信息，也反映了bounding box是否含有Object和bounding box坐标的准确度。</p>
 <center><img src="/images/yolo/confidence.gif" width="100%"></center>
 
 <p>将YOLO用于PASCAL VOC数据集时：<br>论文使用的 S=7，即将一张图像分为7×7=49个栅格每一个栅格预测B=2个boxes（每个box有 x,y,w,h,confidence，5个预测值），同时C=20（PASCAL数据集中有20个类别）。<br>因此，最后的prediction是7×7×30 { 即S <em> S </em> ( B * 5 + C) }的Tensor。</p>

@@ -86,12 +86,9 @@
 <meta property="og:description" content="传统CNN通过扩增数据获得数据的一些不变性，如旋转不变性，平移不变性等，是一种隐式的学习，而空间变换网络（Spatial Transformer Networks，简称STN）通过显式学习数据的各种变换参数（如旋转，平移，仿射变换等）来获得这些变换的不变性。这个网络可以很方便的插入到已有的CNN网络中。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/stn/intro-res.png">
-<meta property="og:image" content="http://yoursite.com/images/stn/intro-res.png">
-<meta property="og:image" content="http://yoursite.com/images/stn/architecture.png">
 <meta property="og:image" content="http://yoursite.com/images/stn/architecture.png">
 <meta property="og:image" content="http://yoursite.com/images/stn/para-sample.png">
-<meta property="og:image" content="http://yoursite.com/images/stn/para-sample.png">
-<meta property="og:updated_time" content="2018-04-13T08:31:32.682Z">
+<meta property="og:updated_time" content="2018-04-25T04:17:12.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spatial Transformer Networks">
 <meta name="twitter:description" content="传统CNN通过扩增数据获得数据的一些不变性，如旋转不变性，平移不变性等，是一种隐式的学习，而空间变换网络（Spatial Transformer Networks，简称STN）通过显式学习数据的各种变换参数（如旋转，平移，仿射变换等）来获得这些变换的不变性。这个网络可以很方便的插入到已有的CNN网络中。">
@@ -348,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-04-13T16:31:32+08:00">
-                2018-04-13
+              <time title="更新于" itemprop="dateModified" datetime="2018-04-25T12:17:12+08:00">
+                2018-04-25
               </time>
             
           </span>
@@ -398,7 +395,7 @@
                   <span class="post-meta-item-text">字数统计 &#58;</span>
                 
                 <span title="字数统计">
-                  1,040
+                  1,037
                 </span>
               
 
@@ -449,24 +446,15 @@
 </ul>
 </li>
 </ul>
-<blockquote id="fn__^">
-<sup>_^</sup>. <img src="/images/stn/intro-res.png" alt=""><a href="#reffn__^" title="Jump back to footnote [_^] in the text."> &#8617;</a>
-</blockquote>
 <center><img src="/images/stn/intro-res.png" width="50%"></center>
 
 <h1 id="Spatial-Transformers"><a href="#Spatial-Transformers" class="headerlink" title="Spatial Transformers"></a>Spatial Transformers</h1><p>由以下三部分组成</p>
-<blockquote id="fn__^">
-<sup>_^</sup>. <img src="/images/stn/architecture.png" alt=""><a href="#reffn__^" title="Jump back to footnote [_^] in the text."> &#8617;</a>
-</blockquote>
 <center><img src="/images/stn/architecture.png" width="60%"></center>
 
 <ul>
 <li><strong>Localisation Network</strong>: 输入feature map，输出$\theta$。$\theta$的尺寸取决于变换类型，比如对于仿射变换，$\theta$就是6维的。这个网络可以采用任意形式，比如全连接网络或卷积网络，但是最后应该有一个回归层输出参数$\theta$。</li>
 <li><strong>Parameterised Sampling Grid</strong>: 以下是将Parameterised Sampling Grid应用到图像U上得到输出V的两个例子，图(a)是一个单位变换，图(b)是一个仿射变换。</li>
 </ul>
-<blockquote id="fn__^">
-<sup>_^</sup>. <img src="/images/stn/para-sample.png" alt=""><a href="#reffn__^" title="Jump back to footnote [_^] in the text."> &#8617;</a>
-</blockquote>
 <center><img src="/images/stn/para-sample.png" width="60%"></center>
 
 <ul>
