@@ -88,7 +88,7 @@
 <meta property="og:image" content="http://yoursite.com/images/r-fcn/depth.png">
 <meta property="og:image" content="http://yoursite.com/images/r-fcn/key-idea.png">
 <meta property="og:image" content="http://yoursite.com/images/r-fcn/vis.png">
-<meta property="og:updated_time" content="2018-04-23T11:56:07.219Z">
+<meta property="og:updated_time" content="2018-05-23T07:34:18.171Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="R-FCN">
 <meta name="twitter:description" content="R-FCN是在Faster R-CNN的框架上进行改造，第一，把base network由VGG16换成了ResNet，第二，把Fast R-CNN换成了先用卷积做prediction，再进行ROI pooling。由于ROI pooling会丢失位置信息，故在pooling前加入位置信息，即指定不同score map负责检测目标的不同位置。pooling后把不同位置得到的score map进行">
@@ -335,8 +335,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-04-23T19:56:07+08:00">
-                2018-04-23
+              <time title="更新于" itemprop="dateModified" datetime="2018-05-23T15:34:18+08:00">
+                2018-05-23
               </time>
             
           </span>
@@ -385,7 +385,7 @@
                   <span class="post-meta-item-text">字数统计 &#58;</span>
                 
                 <span title="字数统计">
-                  1,388
+                  1,390
                 </span>
               
 
@@ -437,17 +437,17 @@
 </li>
 <li><p>$k^2(C+1)$的conv: ResNet 101的输出是<code>W*H*1024</code>，用$k^2(C+1)$个<code>1*1*1024</code>的卷积核去卷积即可得到$k^2(C+1)$个大小为<code>W*H</code>的position sensitive的score map。这步的卷积操作就是在做prediction。例如k = 3，表示把一个ROI划分成3*3，对应的9个位置分别是：上左（左上角），上中，上右，中左，中中，中右，下左，下中，下右（右下角）。</p>
 </li>
-<li><p>$k^2(C+1)$个feature map的物理意义: 共有<code>k*k = 9</code>个颜色，每个颜色的立体块<code>(W*H*(C+1))</code>表示的是不同位置存在目标的概率值（第一块黄色表示的是左上角位置，最后一块淡蓝色表示的是右下角位置）。共有$k^2*(C+1)$个feature map。每个feature map，z(i,j,c)是第i+k(j-1)个立体块上的第c个map（1&lt;= i,j &lt;=3）。(i,j)决定了9种位置的某一种位置，假设为左上角位置（i=j=1），c决定了哪一类，假设为person类。在z(i,j,c)这个feature map上的某一个像素的位置是（x,y），像素值是value，则value表示的是原图对应的(x,y)这个位置上可能是人（c=‘person’）且是人的左上部位（i=j=1）的概率值。</p>
+<li><p>$k^2(C+1)$个feature map的物理意义: 共有<code>k*k = 9</code>个颜色，每个颜色的立体块<code>(W*H*(C+1))</code>表示的是不同位置存在目标的概率值（第一块黄色表示的是左上角位置，最后一块淡蓝色表示的是右下角位置）。共有$k^2(C+1)$个feature map。每个feature map，z(i,j,c)是第i+k(j-1)个立体块上的第c个map（1&lt;= i,j &lt;=3）。(i,j)决定了9种位置的某一种位置，假设为左上角位置（i=j=1），c决定了哪一类，假设为person类。在z(i,j,c)这个feature map上的某一个像素的位置是（x,y），像素值是value，则value表示的是原图对应的(x,y)这个位置上可能是人（c=‘person’）且是人的左上部位（i=j=1）的概率值。</p>
 </li>
 <li><p>ROI pooling的输入和输出：ROI pooling操作的输入（对于C+1个类）是$k^2\times (C+1)\times W’\times H’$（W’和H’是ROI的宽度和高度）的score map上某ROI对应的那个立体块，且该立体块组成一个新的$k^2\times (C+1)\times W’\times H’$的立体块：每个颜色的立体块（C+1）都只抠出对应位置的一个bin，把这<code>k*k</code>个bin组成新的立体块，大小为$(C+1)\times W’\times H’$。例如，上图中的第一块黄色只取左上角的bin，最后一块淡蓝色只取右下角的bin。所有的bin重新组合后就变成了类似右图的那个薄的立体块（图中的这个是池化后的输出，即每个面上的每个bin上已经是一个像素。池化前这个bin对应的是一个区域，是多个像素）。ROI pooling的输出为为一个$(C+1)\times k\times k$的立体块。</p>
 </li>
-<li><p>vote投票：k*k个bin直接进行求和（每个类单独做）得到每一类的score，并进行softmax得到每类的最终得分，并用于计算损失。</p>
+<li><p>vote投票：<code>k*k</code>个bin直接进行求和（每个类单独做）得到每一类的score，并进行softmax得到每类的最终得分，并用于计算损失。</p>
 </li>
 <li><p>训练的样本选择策略：online hard example mining (OHEM) 。主要思想就是对样本按loss进行排序，选择前面loss较小的，这个策略主要用来对负样本进行筛选，使得正负样本更加平衡。</p>
 </li>
 <li><p>两个关键层：</p>
 <ol>
-<li>包含多个 Score Map 的卷积层：把目标分割成了 <code>k*k</code> 个部分（比如3<em>3），每个部分映射到一张 Score Map 上，每个 Score Map 对应目标的一部分（如上图中的 top-left 左上角的 1/9）。最终得到 `k</em>k` 个Score Map，每一个 Map通道数为 分类个数 C+1。</li>
+<li>包含多个 Score Map 的卷积层：把目标分割成了 <code>k*k</code> 个部分（比如<code>3*3</code>），每个部分映射到一张 Score Map 上，每个 Score Map 对应目标的一部分（如上图中的 top-left 左上角的 1/9）。最终得到 <code>k*k</code> 个Score Map，每一个 Map通道数为 分类个数 C+1。</li>
 <li>一个 ROI Pooling 层：这个 ROI 层仅针对上面的其中一个 Score Map 执行 Pooling 操作，重新排列成 <code>k*k</code>，通道数为 C+1。ROI Pooling 层通过 <code>k*k</code> 个 Part 进行投票，得到分类结果。</li>
 </ol>
 <center><img src="/images/r-fcn/vis.png" width="100%"></center>
